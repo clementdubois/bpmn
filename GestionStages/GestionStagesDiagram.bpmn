@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/test">
+  <process id="myProcess" name="My process" isExecutable="true">
+    <userTask id="SoumissionStage" name="Soumission de l'offre de stage par l'étudiant" activiti:assignee="kermit">
+      <extensionElements>
+        <activiti:formProperty id="sujetStage" name="Sujet du stage" type="string" required="true"></activiti:formProperty>
+        <activiti:formProperty id="nomEntreprise" name="Nom de l'entreprise" type="string" required="true"></activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <userTask id="approbationCommission" name="Approbation du stage par la commission" activiti:assignee="kermit">
+      <documentation>Sujet de stage : ${sujetStage}
+Entreprise : ${nomEntreprise}</documentation>
+      <extensionElements>
+        <activiti:formProperty id="approbationCom" name="Validez-vous l'offre de stage ?" type="enum" required="true">
+          <activiti:value id="true" name="oui"></activiti:value>
+          <activiti:value id="false" name="non"></activiti:value>
+        </activiti:formProperty>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="flow1" sourceRef="SoumissionStage" targetRef="approbationCommission"></sequenceFlow>
+    <exclusiveGateway id="exclusivegateway1" name="Exclusive Gateway"></exclusiveGateway>
+    <sequenceFlow id="flow2" sourceRef="approbationCommission" targetRef="exclusivegateway1"></sequenceFlow>
+    <sequenceFlow id="flow3" sourceRef="exclusivegateway1" targetRef="SoumissionStage">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${approbationCom == false}]]></conditionExpression>
+    </sequenceFlow>
+    <endEvent id="endevent1" name="End"></endEvent>
+    <sequenceFlow id="flow4" sourceRef="exclusivegateway1" targetRef="endevent1"></sequenceFlow>
+    <startEvent id="startevent1" name="Start"></startEvent>
+    <sequenceFlow id="flow5" sourceRef="startevent1" targetRef="SoumissionStage"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_myProcess">
+    <bpmndi:BPMNPlane bpmnElement="myProcess" id="BPMNPlane_myProcess">
+      <bpmndi:BPMNShape bpmnElement="SoumissionStage" id="BPMNShape_SoumissionStage">
+        <omgdc:Bounds height="55.0" width="151.0" x="160.0" y="180.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="approbationCommission" id="BPMNShape_approbationCommission">
+        <omgdc:Bounds height="75.0" width="125.0" x="360.0" y="170.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="exclusivegateway1" id="BPMNShape_exclusivegateway1">
+        <omgdc:Bounds height="40.0" width="40.0" x="530.0" y="187.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="endevent1" id="BPMNShape_endevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="615.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="startevent1" id="BPMNShape_startevent1">
+        <omgdc:Bounds height="35.0" width="35.0" x="50.0" y="190.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
+        <omgdi:waypoint x="311.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="360.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="485.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="530.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow3" id="BPMNEdge_flow3">
+        <omgdi:waypoint x="550.0" y="187.0"></omgdi:waypoint>
+        <omgdi:waypoint x="550.0" y="139.0"></omgdi:waypoint>
+        <omgdi:waypoint x="235.0" y="139.0"></omgdi:waypoint>
+        <omgdi:waypoint x="235.0" y="180.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow4" id="BPMNEdge_flow4">
+        <omgdi:waypoint x="570.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="615.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow5" id="BPMNEdge_flow5">
+        <omgdi:waypoint x="85.0" y="207.0"></omgdi:waypoint>
+        <omgdi:waypoint x="160.0" y="207.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
